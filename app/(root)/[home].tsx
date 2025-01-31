@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
         marginBottom:0,
       },
       card: {
+        right:5,
         backgroundColor: 'transparent',
         padding: 20,
         borderRadius: 10,
@@ -129,8 +130,8 @@ const styles = StyleSheet.create({
         height:280,
         bottom:90,
         paddingTop:90,
-        borderBottomLeftRadius:50,
-        borderBottomRightRadius:50,
+        borderBottomLeftRadius:45,
+        borderBottomRightRadius:45,
     },
     bottomcontainer:{
         backgroundColor:"white",
@@ -180,8 +181,8 @@ const styles = StyleSheet.create({
     },
     backgroundImage:{
         position:"absolute",
-        height:120,
-        width:160,
+        height:130,
+        width:170,
     }
 
 })

@@ -1,81 +1,83 @@
 import React, { useState } from 'react';
-import { useRoute } from '@react-navigation/native';
-import { Button, Text, View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 
 const TestScreen = () => {
-  const route = useRoute();
-  
-  // Define a type for valid test categories
-  type TestType = keyof typeof questions;
+  // Define valid test categories
+  const { testType } = useLocalSearchParams<{ testType: keyof typeof questions }>();
 
-  const { testType } = route.params as { testType: TestType }; // ✅ Type safety applied
-  const { testscreen } = useLocalSearchParams(); // ✅ Read dynamic route parameter
-
+  // Define questions object with types
   const questions = {
     respiratory_basics: [
-      { question: 'What is tidal volume?', options: ['500mL', '1L', '250mL', '750mL'], correct: '500mL' },
-      { question: 'What is PEEP?', options: ['Positive End-Expiratory Pressure', 'Peak Expiratory Pressure', 'Partial Exhalation Pressure', 'Pulmonary End Pressure'], correct: 'Positive End-Expiratory Pressure' },
-    ],
-    information_gathering: [
-      { question: 'What does a blood gas tell us?', options: ['Oxygenation', 'Ventilation', 'Acid-Base Status', 'All of the above'], correct: 'All of the above' },
-      { question: 'What is normal pH?', options: ['7.35-7.45', '7.25-7.35', '7.45-7.55', '7.15-7.25'], correct: '7.35-7.45' },
-    ],
-    ventilator_management: [
-      { question: 'What mode provides full ventilatory support?', options: ['AC', 'SIMV', 'CPAP', 'BiPAP'], correct: 'AC' },
-    ],
-    oxygen_therapy: [
-      { question: 'What is the FiO2 of room air?', options: ['21%', '50%', '40%', '60%'], correct: '21%' },
-    ],
-    lung_mechanics: [
-      { question: 'What is compliance?', options: ['Lung elasticity', 'Airway resistance', 'Lung volume change per unit pressure', 'Oxygen transport'], correct: 'Lung volume change per unit pressure' },
-    ],
-    acid_base_balance: [
-      { question: 'What organ primarily regulates pH?', options: ['Lungs', 'Kidneys', 'Heart', 'Liver'], correct: 'Kidneys' },
-    ],
-    patient_assessment: [
-      { question: 'Which vital sign is most important for respiratory distress?', options: ['Heart Rate', 'Oxygen Saturation', 'Blood Pressure', 'Temperature'], correct: 'Oxygen Saturation' },
-    ],
-    neonatal_respiratory_care: [
-      { question: 'What is a normal neonatal respiratory rate?', options: ['20-40', '30-60', '40-80', '15-30'], correct: '30-60' },
-    ],
-    chest_imaging: [
-      { question: 'What does a white-out on X-ray indicate?', options: ['Pleural Effusion', 'Pneumonia', 'Pneumothorax', 'ARDS'], correct: 'ARDS' },
-    ],
-    advanced_airway_management: [
-      { question: 'What is the correct ET tube size for an adult male?', options: ['6.0', '7.5', '8.0-8.5', '9.0'], correct: '8.0-8.5' },
+      { question: 'What is tidal volume?', options: ['500mL', '1L', '250mL', '750mL'], correct: '500mL', explanation: 'Tidal volume is the volume of air displaced during normal breathing.' },
+      { question: 'What is PEEP?', options: ['Positive End-Expiratory Pressure', 'Peak Expiratory Pressure', 'Partial Exhalation Pressure', 'Pulmonary End Pressure'], correct: 'Positive End-Expiratory Pressure', explanation: 'PEEP is used to keep airways open by maintaining pressure at the end of exhalation.' },
     ],
   };
 
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
+  const [feedbackShown, setFeedbackShown] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [feedbackState, setFeedbackState] = useState<{ [key: number]: boolean }>({});
+
 
   const handleAnswerPress = (index: number, answer: string) => {
     setSelectedAnswers((prev) => ({ ...prev, [index]: answer }));
+    setFeedbackState((prev) => ({ ...prev, [index]: true }));  
   };
+  
+
+  const handleSwipe = () => {
+    if (feedbackShown) {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % questions[testType].length);
+      setFeedbackShown(false); // Reset feedback state for next question
+    }
+  };
+
+  const renderItem = ({ item, index }: { item: { question: string; options: string[]; correct: string; explanation: string }; index: number }) => (
+    <View style={styles.questionContainer}>
+      <Text style={styles.questionText}>{item.question}</Text>
+      {item.options.map((opt: string, i: number) => (
+        <TouchableOpacity
+          key={i}
+          style={[
+            styles.optionButton,
+            // Apply selectedOption only if the user has selected this option
+            selectedAnswers[index] === opt ? styles.selectedOption : {},
+          ]}
+          onPress={() => handleAnswerPress(index, opt)}
+        >
+          <Text style={styles.optionText}>{opt}</Text>
+        </TouchableOpacity>
+      ))}
+      {feedbackState[index] && selectedAnswers[index] && (
+        <View style={styles.feedbackContainer}>
+          <Text style={styles.feedbackText}>
+            {selectedAnswers[index] === item.correct ? 'Correct!' : 'Incorrect'}
+          </Text>
+          <Text style={styles.explanationText}>{item.explanation}</Text>
+        </View>
+      )}
+    </View>
+  );
+  
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{testType.replace('_', ' ')}</Text>
       <FlatList
-        data={questions[testType] || []}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <View style={styles.questionContainer}>
-            <Text style={styles.questionText}>{item.question}</Text>
-            {item.options.map((opt, i) => (
-              <TouchableOpacity
-                key={i}
-                style={[
-                  styles.optionButton,
-                  selectedAnswers[index] === opt ? styles.selectedOption : {},
-                ]}
-                onPress={() => handleAnswerPress(index, opt)}
-              >
-                <Text style={styles.optionText}>{opt}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
+        data={questions[testType]}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={handleSwipe}
+        getItemLayout={(_, index) => ({
+          length: 300, // Adjust based on the size of your items
+          offset: 320 * index,
+          index,
+        })}
+        initialScrollIndex={currentIndex}
       />
     </View>
   );
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#13002c',
   },
   title: {
     fontSize: 24,
@@ -97,9 +99,12 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   questionContainer: {
+    top:100,
+    height:500,
+    width:350,
     marginBottom: 20,
     padding: 15,
-    backgroundColor: 'white',
+    backgroundColor: '#13002c',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -111,19 +116,37 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    color:"white",
   },
   optionButton: {
     padding: 12,
     marginVertical: 5,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 8,
+    borderBottomColor:"white",
+    borderBottomWidth:1,
     alignItems: 'center',
   },
   optionText: {
     fontSize: 16,
+    color:"white",
   },
   selectedOption: {
     backgroundColor: '#4CAF50',
+    borderRadius:50,
+    alignItems: 'center',
+  },
+  feedbackContainer: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+  },
+  feedbackText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  explanationText: {
+    fontSize: 14,
+    marginTop: 5,
+    color: '#555',
   },
 });
-
