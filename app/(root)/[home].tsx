@@ -2,6 +2,7 @@ import { Animated, FlatList, Image, ImageBackground, SafeAreaView, StyleSheet, T
 import React, { useRef } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router'; 
+import questions from '../data/questions';
 
 const Home = () => {
     const scrollY = useRef(new Animated.Value(0)).current;
@@ -40,11 +41,11 @@ const Home = () => {
                 style={styles.card} 
                 onPress={() => router.push(`/testscreen?testType=${testType}`)} // ✅ Pass `testType` as query
             >
-                <ImageBackground 
+                {/* <ImageBackground 
                     source={require('../../assets/images/cardback.png')} 
                     style={styles.backgroundImage}
                     resizeMode="cover"
-                />
+                /> */}
                 <Text style={styles.cardText}>{title}</Text>
             </TouchableOpacity>
         );
@@ -105,18 +106,27 @@ const styles = StyleSheet.create({
         marginBottom:0,
       },
       card: {
-        right:5,
-        backgroundColor: 'transparent',
+        right: 5,
+        backgroundColor: '#CB696C',
         padding: 20,
         borderRadius: 10,
-        width:160,
-        height:120,
-        marginTop:0
+        width: 160,
+        height: 120,
+        marginTop: 0,
+        // Shadow for iOS
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.7,
+        shadowRadius: 5,
+        // Elevation for Android
+        elevation: 5,
       },
       cardText: {
-        fontSize: 16,
+        top:50,
+        fontSize: 12,
         fontWeight: 'bold',
-        color:"#361a76",
+        color:"white",
+        textAlign:"center",
       },
     qstext:{
         position:"absolute",
@@ -130,8 +140,8 @@ const styles = StyleSheet.create({
         height:280,
         bottom:90,
         paddingTop:90,
-        borderBottomLeftRadius:45,
-        borderBottomRightRadius:45,
+        borderBottomLeftRadius:40,
+        borderBottomRightRadius:40,
     },
     bottomcontainer:{
         backgroundColor:"white",

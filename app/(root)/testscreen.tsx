@@ -1,35 +1,32 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
+import questions from '../data/questions';
 
 const TestScreen = () => {
-  // Define valid test categories
   const { testType } = useLocalSearchParams<{ testType: keyof typeof questions }>();
-
-  // Define questions object with types
-  const questions = {
-    respiratory_basics: [
-      { question: 'What is tidal volume?', options: ['500mL', '1L', '250mL', '750mL'], correct: '500mL', explanation: 'Tidal volume is the volume of air displaced during normal breathing.' },
-      { question: 'What is PEEP?', options: ['Positive End-Expiratory Pressure', 'Peak Expiratory Pressure', 'Partial Exhalation Pressure', 'Pulmonary End Pressure'], correct: 'Positive End-Expiratory Pressure', explanation: 'PEEP is used to keep airways open by maintaining pressure at the end of exhalation.' },
-    ],
-  };
-
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
-  const [feedbackShown, setFeedbackShown] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [feedbackState, setFeedbackState] = useState<{ [key: number]: boolean }>({});
-
+  const router = useRouter();
 
   const handleAnswerPress = (index: number, answer: string) => {
     setSelectedAnswers((prev) => ({ ...prev, [index]: answer }));
-    setFeedbackState((prev) => ({ ...prev, [index]: true }));  
+    setFeedbackState((prev) => ({ ...prev, [index]: true }));
   };
-  
 
   const handleSwipe = () => {
-    if (feedbackShown) {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % questions[testType].length);
-      setFeedbackShown(false); // Reset feedback state for next question
+    const nextIndex = currentIndex + 1;
+    if (nextIndex === questions[testType].length) {
+      const score = Object.values(selectedAnswers).reduce((acc, answer, index) => {
+        const correctAnswer = questions[testType][index].correct;
+        return answer === correctAnswer ? acc + 1 : acc;
+      }, 0);
+
+      router.push(`/ScoreScreen?score=${score}&totalQuestions=${questions[testType].length}`);
+    } else {
+      setCurrentIndex(nextIndex);
     }
   };
 
@@ -41,7 +38,6 @@ const TestScreen = () => {
           key={i}
           style={[
             styles.optionButton,
-            // Apply selectedOption only if the user has selected this option
             selectedAnswers[index] === opt ? styles.selectedOption : {},
           ]}
           onPress={() => handleAnswerPress(index, opt)}
@@ -59,7 +55,6 @@ const TestScreen = () => {
       )}
     </View>
   );
-  
 
   return (
     <View style={styles.container}>
@@ -73,7 +68,7 @@ const TestScreen = () => {
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={handleSwipe}
         getItemLayout={(_, index) => ({
-          length: 300, // Adjust based on the size of your items
+          length: 300,
           offset: 320 * index,
           index,
         })}
@@ -99,9 +94,9 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   questionContainer: {
-    top:100,
-    height:500,
-    width:350,
+    top: 100,
+    height: 500,
+    width: 350,
     marginBottom: 20,
     padding: 15,
     backgroundColor: '#13002c',
@@ -116,22 +111,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    color:"white",
+    color: 'white',
   },
   optionButton: {
     padding: 12,
     marginVertical: 5,
-    borderBottomColor:"white",
-    borderBottomWidth:1,
+    borderBottomColor: 'white',
+    borderBottomWidth: 1,
     alignItems: 'center',
   },
   optionText: {
     fontSize: 16,
-    color:"white",
+    color: 'white',
   },
   selectedOption: {
     backgroundColor: '#4CAF50',
-    borderRadius:50,
+    borderRadius: 50,
     alignItems: 'center',
   },
   feedbackContainer: {
