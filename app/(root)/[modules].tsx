@@ -1,12 +1,15 @@
-import { Text, View } from "react-native";
+import React from 'react';
+import { SafeAreaView, View, Text } from 'react-native';
+
 
 const ModuleScreen = () => {
-    return (
+  return (
+    <SafeAreaView>
       <View>
-        <Text>Module Screen</Text>
+        <Text>Modules Screen</Text>
       </View>
-    );
-  };
-  
-  export default ModuleScreen;
-  
+    </SafeAreaView>
+  );
+};
+
+export default ModuleScreen;

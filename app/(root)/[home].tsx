@@ -1,8 +1,10 @@
-import { Animated, FlatList, Image, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useRef } from 'react';
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router'; 
-import questions from '../data/questions';
+import { Ionicons } from '@expo/vector-icons';
+import { BottomTabBar } from '@react-navigation/bottom-tabs';
+
+
 
 const Home = () => {
     const scrollY = useRef(new Animated.Value(0)).current;
@@ -13,39 +15,36 @@ const Home = () => {
         outputRange: [1, 0],
         extrapolate: 'clamp',
     });
-
     const DATA = [
-        { id: '1', title: 'RESPIRATORY ASSESSMENT', testType: 'respiratory_basics' },
-        { id: '2', title: 'INFORMATION GATHERING', testType: 'information_gathering' },
-        { id: '3', title: 'INFECTION PREVENTION', testType: 'infection_prevention' },
-        { id: '4', title: 'VENTILATOR MANAGEMENT', testType: 'ventilator_management' },
-        { id: '5', title: 'OXYGEN THERAPY', testType: 'oxygen_therapy' },
-        { id: '6', title: 'LUNG MECHANICS', testType: 'lung_mechanics' },
-        { id: '7', title: 'ACID-BASE BALANCE', testType: 'acid_base_balance' },
-        { id: '8', title: 'PATIENT ASSESSMENT', testType: 'patient_assessment' },
-        { id: '9', title: 'NEONATAL RESPIRATORY CARE', testType: 'neonatal_respiratory_care' },
-        { id: '10', title: 'CHEST IMAGING', testType: 'chest_imaging' },
-        { id: '11', title: 'ADVANCED AIRWAY MANAGEMENT', testType: 'advanced_airway_management' },
+        { id: '1', title: 'RESPIRATORY ASSESSMENT', testType: 'respiratory_basics', image: require('../../assets/images/stethoscope.png') },
+        { id: '2', title: 'INFORMATION GATHERING', testType: 'information_gathering', image: require('../../assets/images/clipboard.png') },
+        { id: '3', title: 'INFECTION PREVENTION', testType: 'infection_prevention', image: require('../../assets/images/mask.png') },
+        { id: '4', title: 'VENTILATOR MANAGEMENT', testType: 'ventilator_management', image: require('../../assets/images/ventman.png') },
+        { id: '5', title: 'OXYGEN THERAPY', testType: 'oxygen_therapy', image: require('../../assets/images/oxygen.png') },
+        { id: '6', title: 'LUNG MECHANICS', testType: 'lung_mechanics', image: require('../../assets/images/lungs.png') },
+        { id: '7', title: 'ACID-BASE BALANCE', testType: 'acid_base_balance', image: require('../../assets/images/abg.png') },
+        { id: '8', title: 'PATIENT ASSESSMENT', testType: 'patient_assessment', image: require('../../assets/images/bedcare.png') },
+        { id: '9', title: 'NEONATAL RESPIRATORY CARE', testType: 'neonatal_respiratory_care', image: require('../../assets/images/neonatal.png') },
+        // { id: '10', title: 'CHEST IMAGING', testType: 'chest_imaging', image: require('../../assets/images/camera.png') },
+        // { id: '11', title: 'ADVANCED AIRWAY MANAGEMENT', testType: 'advanced_airway_management', image: require('../../assets/images/mic.png') },
     ];
 
     interface CardItemProps {
         title: string;
         testType: string;
+        image: any;
     }
 
-    const CardItem: React.FC<CardItemProps> = ({ title, testType }) => {
+
+    const CardItem: React.FC<CardItemProps> = ({ title, testType, image }) => {
         const router = useRouter();
-    
+
         return (
             <TouchableOpacity 
                 style={styles.card} 
-                onPress={() => router.push(`/testscreen?testType=${testType}`)} // ✅ Pass `testType` as query
+                onPress={() => router.push(`/testscreen?testType=${testType}`)} 
             >
-                {/* <ImageBackground 
-                    source={require('../../assets/images/cardback.png')} 
-                    style={styles.backgroundImage}
-                    resizeMode="cover"
-                /> */}
+                <Image source={image} style={styles.cardImage} />
                 <Text style={styles.cardText}>{title}</Text>
             </TouchableOpacity>
         );
@@ -73,7 +72,13 @@ const Home = () => {
                 <Animated.FlatList
                     data={DATA}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <CardItem title={item.title} testType={item.testType} />}
+                    renderItem={({ item }) => (
+                        <CardItem 
+                            title={item.title} 
+                            testType={item.testType} 
+                            image={item.image} // Pass image path instead of icon
+                        />
+                    )}
                     numColumns={2}
                     columnWrapperStyle={styles.row}
                     contentContainerStyle={styles.listContainer}
@@ -83,6 +88,7 @@ const Home = () => {
                     )}
                 />
             </View>
+            
         </SafeAreaView>
     );
 };
@@ -93,6 +99,13 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:"white",
+    },
+    cardImage: {
+        width: 40,
+        height: 40,
+        alignSelf: 'center',
+        marginBottom: 10,
+        resizeMode:'contain',
     },
     row: {
         justifyContent: 'space-between',
@@ -122,7 +135,7 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
       cardText: {
-        top:50,
+        top:0,
         fontSize: 12,
         fontWeight: 'bold',
         color:"white",
@@ -193,6 +206,13 @@ const styles = StyleSheet.create({
         position:"absolute",
         height:130,
         width:170,
-    }
+    },
+    cardIcon: {
+         position: 'absolute',
+         top: 4,
+         left: 5,
+         color:"white",
+        },
+
 
 })
