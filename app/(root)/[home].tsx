@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { useRouter } from 'expo-router'; 
 import { Ionicons } from '@expo/vector-icons';
 import { BottomTabBar } from '@react-navigation/bottom-tabs';
+import { replace } from 'expo-router/build/global-state/routing';
 
 
 
@@ -10,11 +11,26 @@ const Home = () => {
     const scrollY = useRef(new Animated.Value(0)).current;
     const router = useRouter(); 
 
+ 
+    const handleModbutton = () => {
+        console.log("Button pressed, navigating to module...");
+        try {
+          router.push("/(root)/mods");
+          console.log("Navigation triggered.");
+        } catch (error) {
+          console.log("Error navigating:", error);
+        }
+      };
+      
+      
+
+
     const opacity = scrollY.interpolate({
         inputRange: [0, 100],
         outputRange: [1, 0],
         extrapolate: 'clamp',
     });
+   
     const DATA = [
         { id: '1', title: 'RESPIRATORY ASSESSMENT', testType: 'respiratory_basics', image: require('../../assets/images/stethoscope.png') },
         { id: '2', title: 'INFORMATION GATHERING', testType: 'information_gathering', image: require('../../assets/images/clipboard.png') },
@@ -29,6 +45,7 @@ const Home = () => {
         // { id: '11', title: 'ADVANCED AIRWAY MANAGEMENT', testType: 'advanced_airway_management', image: require('../../assets/images/mic.png') },
     ];
 
+
     interface CardItemProps {
         title: string;
         testType: string;
@@ -36,8 +53,10 @@ const Home = () => {
     }
 
 
+
     const CardItem: React.FC<CardItemProps> = ({ title, testType, image }) => {
         const router = useRouter();
+       
 
         return (
             <TouchableOpacity 
@@ -49,7 +68,7 @@ const Home = () => {
             </TouchableOpacity>
         );
     };
-
+    
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.topcontainer}>
@@ -63,7 +82,13 @@ const Home = () => {
                 <View style={styles.headertextloc}>
                     <View><Text style={styles.headertext}>Days to{"\n"}<Text style={styles.boldText}>Graduate</Text></Text></View>
                     <View><Text style={styles.headertext}>Topics{"\n"}Reviewed</Text></View>
-                    <View><Text style={styles.headertext}>Chance{"\n"}of Passing</Text></View>
+                    <View><Text style={styles.modheader}>{"\n"}Modules     </Text></View>
+                </View>
+                <View style={styles.statarrow}>
+                <TouchableOpacity onPress={handleModbutton}>
+                <Ionicons name='arrow-forward-circle' size={60} color={"white"} />
+                </TouchableOpacity>
+
                 </View>
             </View>
 
@@ -100,6 +125,20 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:"white",
     },
+    modheader:{
+         color:"white",
+         top:5,
+         left:3,
+    },
+    statarrow: {
+        left: 300,
+        top: 30,
+        shadowColor: '#000', // Black shadow color
+        shadowOffset: { width: 0, height: 1 }, // Shadow offset
+        shadowOpacity: 0.8, // Opacity of the shadow
+        shadowRadius: 4, // Blurriness of the shadow
+        elevation: 5, // For Android shadow (depth)
+      },
     cardImage: {
         width: 40,
         height: 40,
@@ -128,7 +167,7 @@ const styles = StyleSheet.create({
         marginTop: 0,
         // Shadow for iOS
         shadowColor: 'black',
-        shadowOffset: { width: 0, height: 5 },
+        shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.7,
         shadowRadius: 5,
         // Elevation for Android
