@@ -1,15 +1,42 @@
 import { Animated, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'expo-router'; 
 import { Ionicons } from '@expo/vector-icons';
-import { BottomTabBar } from '@react-navigation/bottom-tabs';
 import { replace } from 'expo-router/build/global-state/routing';
+import BottomTabBar from '@/components/bottomfloating';
+import { FIREBASE_AUTH, FIREBASE_DB } from '@/config/firebaseconfig';
+import { doc, getDoc } from 'firebase/firestore';
+import { ActivityIndicator } from 'react-native';
 
 
 
 const Home = () => {
     const scrollY = useRef(new Animated.Value(0)).current;
     const router = useRouter(); 
+    const [userData, setUserData] = useState<{ username: string; school: string; lastName?: string } | null>(null);
+
+
+
+ 
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const user = FIREBASE_AUTH.currentUser;
+            if (user) {
+              try {
+                const userDoc = await getDoc(doc(FIREBASE_DB, "users", user.uid));
+                if (userDoc.exists()) {
+                  const data = userDoc.data() as { username: string; school: string; lastName?: string };
+                  setUserData(data);
+                }
+              } catch (error) {
+                console.error("Error fetching user data:", error);
+              }
+            }
+          };
+
+        fetchUserData();
+    }, []);
 
  
     const handleModbutton = () => {
@@ -72,13 +99,20 @@ const Home = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.topcontainer}>
-                <View style={styles.profset}>
-                    <Ionicons name='person-outline' size={40} color={"white"} />
-                    <Text style={styles.welcometext}>Welcome!</Text>
-                    <Text style={styles.schooltext}>School</Text>
-                    <Ionicons name='settings-outline' size={30} color={"white"} />
+            <View style={styles.profset}>
+                <Ionicons name='person-outline' size={40} color={"white"} />
+                <View style={styles.textContainer}>
+                    <Text style={styles.welcometext}>
+                        {userData?.username
+                            ? `${userData.username} ${userData.lastName ? userData.lastName.charAt(0).toUpperCase() + '.' : ''}`
+                            : "Welcome!"}
+                    </Text>
+                    <Text style={styles.schooltext}>{userData?.school || "School"}</Text>
                 </View>
-                <Image source={require("../../assets/images/Line6.png")} style={styles.lineimg} />
+                <Ionicons name='settings-outline' size={30} color={"white"} />
+            </View>
+
+                            <Image source={require("../../assets/images/Line6.png")} style={styles.lineimg} />
                 <View style={styles.headertextloc}>
                     <View><Text style={styles.headertext}>Days to{"\n"}<Text style={styles.boldText}>Graduate</Text></Text></View>
                     <View><Text style={styles.headertext}>Topics{"\n"}Reviewed</Text></View>
@@ -113,7 +147,7 @@ const Home = () => {
                     )}
                 />
             </View>
-            
+            <BottomTabBar/>
         </SafeAreaView>
     );
 };
@@ -209,21 +243,25 @@ const styles = StyleSheet.create({
         paddingRight:20,
         justifyContent:"space-between",
     },
-    welcometext:{
-        color:"white",
-        fontWeight:900,
-        fontSize:24,
-        right:30,
+    welcometext: {
+        fontSize: 24,
+        fontWeight: '900',
+        color: 'white',
+        flexShrink: 1,  // Allow the text to shrink if it's too long
+        maxWidth: '75%', // Set a max width to prevent overflow
+        overflow: 'hidden', // Hide overflow text
+        textOverflow: 'ellipsis', // Add ellipsis for truncation
     },
-    schooltext:{
-        position:"fixed",
-        fontSize:12,
-        right:185,
-        top:30,
-        color:"white",
+    schooltext: {
+        fontSize: 12,
+        color: 'white',
+        flexShrink: 1,  // Allow the text to shrink if it's too long
+        maxWidth: '75%', // Set a max width to prevent overflow
+        overflow: 'hidden', // Hide overflow text
+        textOverflow: 'ellipsis', // Add ellipsis for truncation
     },
     lineimg:{
-        top:60,
+        top:30,
         left:13,
         height:1,
     },
@@ -251,6 +289,12 @@ const styles = StyleSheet.create({
          top: 4,
          left: 5,
          color:"white",
+        },
+        textContainer: {
+            flex: 1,  // Take up available space between the icons
+            justifyContent: 'center',
+            alignItems: 'flex-start', // Align texts to the start (left)
+            paddingHorizontal: 10,  // Space out the text for better consistency
         },
 
 

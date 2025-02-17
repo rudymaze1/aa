@@ -1,468 +1,123 @@
-// import React, { useState } from "react";
-// import {
-//   StyleSheet,
-//   Text,
-//   View,
-//   ScrollView,
-//   TouchableOpacity,
-//   SafeAreaView,
-// } from "react-native";
-// import { Swipeable, GestureHandlerRootView } from "react-native-gesture-handler";
-
-// interface Module {
-//   id: number;
-//   name: string;
-//   description?: string;
-// }
-
-// const ModulesScreen = () => {
-//   const [modulesData, setModulesData] = useState<Module[]>([
-//     { id: 1, name: "Module 1" },
-//     { id: 2, name: "Module 2" },
-//     { id: 3, name: "Module 3" },
-//   ]);
-
-//   const [availableModules, setAvailableModules] = useState<Module[]>([
-//     { id: 101, name: "Module 1", description: "x-ray.\nabg.\noxygen.\n..." },
-//     { id: 102, name: "Module 2", description: "This is the description for Module 2.\nIt contains additional details." },
-//     { id: 103, name: "Module 3", description: "This is the description for Module 3.\nYou can add as many points as needed." },
-//   ]);
-
-//   const handleDelete = (id: number) => {
-//     setModulesData((prev) => prev.filter((module) => module.id !== id));
-//   };
-
-//   const renderRightActions = (id: number) => (
-//     <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(id)}>
-//       <Text style={styles.deleteButtonText}>Delete</Text>
-//     </TouchableOpacity>
-//   );
-
-//   return (
-//     <GestureHandlerRootView style={{ flex: 1 }}>
-//       <SafeAreaView style={styles.container}>
-//         <ScrollView>
-//           {/* Graph Section */}
-//           <View style={styles.graphContainer}>
-//             <Text style={styles.graphTitle}>Graph Placeholder</Text>
-//             <View style={styles.graphPlaceholder} />
-//           </View>
-
-//           {/* Current Modules */}
-//           <View style={styles.modulesSection}>
-//             <Text style={styles.sectionTitle}>Assigned Modules</Text>
-//             <View style={styles.moduleContainer}>
-//               {modulesData.map((module) => (
-//                 <Swipeable key={module.id} renderRightActions={() => renderRightActions(module.id)}>
-//                   <ModuleCard name={module.name} styles={styles} />
-//                 </Swipeable>
-//               ))}
-//             </View>
-//           </View>
-
-//           {/* Available Modules */}
-//           <View style={styles.modulesSection}>
-//             <Text style={styles.sectionTitle}>Available Modules</Text>
-//             <View style={styles.moduleContainer}>
-//               {availableModules.map((module) => (
-//                 <ModuleCard
-//                   key={module.id}
-//                   name={module.name}
-//                   description={module.description}
-//                   styles={styles} // Pass the whole styles object
-//                 />
-//               ))}
-//             </View>
-//           </View>
-//         </ScrollView>
-//       </SafeAreaView>
-//     </GestureHandlerRootView>
-//   );
-// };
-
-// interface ModuleCardProps {
-//   name: string;
-//   description?: string;
-//   styles: any;  // Declare styles explicitly in the prop type
-// }
-
-// const ModuleCard = ({ name, description, styles }: ModuleCardProps) => {
-//   const formatDescription = (description: string) => {
-//     return description
-//       .split("\n")
-//       .map((line, index) => (
-//         <Text key={index} style={styles.bulletPointText}>
-//           • {line}
-//         </Text>
-//       ));
-//   };
-
-//   return (
-//     <TouchableOpacity style={styles.card}>
-//       <Text style={styles.cardText}>{name}</Text>
-//       {description && <View style={styles.descriptionContainer}>{formatDescription(description)}</View>}
-//     </TouchableOpacity>
-//   );
-// };
-
-// export default ModulesScreen;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "white",  // Set the background color to blue
-//   },
-//   bulletPointText: {
-//     color: "#333",
-//     fontSize: 14,
-//     marginTop: 5,
-//   },
-//   descriptionContainer: {
-//     marginBottom: 5,
-//     paddingLeft: 10,
-//   },
-//   graphContainer: {
-//     height: 200,
-//     backgroundColor: "#ddd",
-//     marginBottom: 20,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     borderRadius: 10,
-//   },
-//   graphTitle: {
-//     fontSize: 18,
-//     fontWeight: "bold",
-//     color: "#333",
-//   },
-//   graphPlaceholder: {
-//     width: "100%",
-//     height: "80%",
-//     backgroundColor: "#ccc",
-//     borderRadius: 8,
-//   },
-//   modulesSection: {
-//     marginBottom: 30,
-//     backgroundColor: "white",
-//     borderRadius: 10,
-//     padding: 10,
-//   },
-//   sectionTitle: {
-//     fontSize: 22,
-//     fontWeight: "bold",
-//     marginBottom: 10,
-//     color: "#333",
-//   },
-//   moduleContainer: {
-//     flexDirection: "column",
-//     alignItems: "center",
-//   },
-//   availableModuleCard: {
-//     backgroundColor: "#F9DDDD",
-//     padding: 18,
-//     borderRadius: 10,
-//     width: "100%",
-//     marginBottom: 15,
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 3 },
-//     shadowOpacity: 0.2,
-//     shadowRadius: 5,
-//     elevation: 5,
-//     height: 120,
-//   },
-//   card: {
-//     backgroundColor: "#F9DDDD",
-//     padding: 20,
-//     borderRadius: 10,
-//     marginBottom: 15,
-//     width: 350,
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 3 },
-//     shadowOpacity: 0.2,
-//     shadowRadius: 5,
-//     elevation: 5,
-//   },
-//   cardText: {
-//     color: "#333",
-//     fontWeight: "bold",
-//     fontSize: 16,
-//   },
-//   deleteButton: {
-//     backgroundColor: "#ff3b30",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     height: "80%",
-//     width: 80,
-//     borderRadius: 10,
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowOpacity: 0.3,
-//     shadowRadius: 4,
-//     elevation: 5,
-//   },
-//   deleteButtonText: {
-//     color: "white",
-//     fontWeight: "bold",
-//   },
-// });
-
-
-
-// import React, { useState } from "react";
-// import {
-//   StyleSheet,
-//   Text,
-//   View,
-//   ScrollView,
-//   TouchableOpacity,
-//   SafeAreaView,
-//   Modal,
-// } from "react-native";
-// import { Swipeable, GestureHandlerRootView } from "react-native-gesture-handler";
-
-// interface Module {
-//   id: number;
-//   name: string;
-//   description?: string;
-// }
-
-// const ModulesScreen = () => {
-//   const [modulesData, setModulesData] = useState<Module[]>([
-//     { id: 1, name: "Module 1" },
-//     { id: 2, name: "Module 2" },
-//     { id: 3, name: "Module 3" },
-//   ]);
-
-//   const [availableModules, setAvailableModules] = useState<Module[]>([
-//     { id: 101, name: "Module 1- Evaluation of Patient Data in Cardiopulmonary Care", description: "Objective: Understand how to evaluate and interpret various patient data in the context of the cardiopulmonary system. \nAudience: Medical professionals, respiratory therapists, nurses, or anyone involved in patient care related to the cardiopulmonary system. Overview: This module will explore the key elements of a patient’s medical record, including history, physical examination, diagnostic tests, and other clinical data that help evaluate the cardiopulmonary system." },
-//     { id: 102, name: "Module 2", description: "This is the description for Module 2.\nIt contains additional details." },
-//     { id: 103, name: "Module 3", description: "This is the description for Module 3.\nYou can add as many points as needed." },
-//   ]);
-
-//   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
-
-//   const handleDelete = (id: number) => {
-//     setModulesData((prev) => prev.filter((module) => module.id !== id));
-//   };
-
-//   const renderRightActions = (id: number) => (
-//     <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(id)}>
-//       <Text style={styles.deleteButtonText}>Delete</Text>
-//     </TouchableOpacity>
-//   );
-
-//   return (
-//     <GestureHandlerRootView style={{ flex: 1 }}>
-//       <SafeAreaView style={styles.container}>
-//         <ScrollView>
-//           <View style={styles.graphContainer}>
-//             <Text style={styles.graphTitle}>Graph Placeholder</Text>
-//             <View style={styles.graphPlaceholder} />
-//           </View>
-          
-//           <View style={styles.modulesSection}>
-//             <Text style={styles.asssectionTitle}>Assigned Modules</Text>
-//             {modulesData.map((module) => (
-//               <Swipeable key={module.id} renderRightActions={() => renderRightActions(module.id)}>
-//                 <ModuleCard name={module.name} styles={styles} />
-//               </Swipeable>
-//             ))}
-//           </View>
-
-//           <View style={styles.modulesSection}>
-//             <Text style={styles.sectionTitle}>Available Modules for your program </Text>
-//             {availableModules.map((module) => (
-//               <TouchableOpacity key={module.id} onPress={() => setSelectedModule(module)}>
-//                 <ModuleCard name={module.name} styles={styles} />
-//               </TouchableOpacity>
-//             ))}
-//           </View>
-//         </ScrollView>
-//       </SafeAreaView>
-
-//       <Modal
-//         visible={!!selectedModule}
-//         animationType="slide"
-//         transparent={true}
-//         onRequestClose={() => setSelectedModule(null)}
-//       >
-//         <View style={styles.modalContainer}>
-//           <View style={styles.modalContent}>
-//             <Text style={styles.modalTitle}>{selectedModule?.name}</Text>
-//             <Text style={styles.modalDescription}>{selectedModule?.description}</Text>
-//             <TouchableOpacity onPress={() => setSelectedModule(null)} style={styles.closeButton}>
-//               <Text style={styles.closeButtonText}>Close</Text>
-//             </TouchableOpacity>
-//           </View>
-//         </View>
-//       </Modal>
-//     </GestureHandlerRootView>
-//   );
-// };
-
-// interface ModuleCardProps {
-//   name: string;
-//   styles: any;
-// }
-
-// const ModuleCard = ({ name, styles }: ModuleCardProps) => {
-//   return (
-//     <View style={styles.card}>
-//       <Text style={styles.cardText}>{name}</Text>
-//     </View>
-//   );
-// };
-
-// export default ModulesScreen;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "white",
-//   },
-//   graphContainer: {
-//     height: 200,
-//     backgroundColor: "#ddd",
-//     marginBottom: 20,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     borderRadius: 10,
-//   },
-//   graphTitle: {
-//     fontSize: 18,
-//     fontWeight: "bold",
-//     color: "#333",
-//   },
-//   graphPlaceholder: {
-//     width: "100%",
-//     height: "80%",
-//     backgroundColor: "#ccc",
-//     borderRadius: 8,
-//   },
-//   modulesSection: {
-//     marginBottom: 30,
-//     padding: 10,
-//   },
-//   sectionTitle: {
-//     left:70,
-//     marginBottom: 10,
-//     color:"#8181E0",
-//   },
-//   asssectionTitle:{
-//     left:130,
-//     color:"#8181E0",
-//   },
-//   card: {
-//     backgroundColor: "#F9DDDD",
-//     padding: 20,
-//     borderRadius: 10,
-//     marginBottom: 15,
-//     width: 350,
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 3 },
-//     shadowOpacity: 0.2,
-//     shadowRadius: 5,
-//     elevation: 5,
-//   },
-//   cardText: {
-//     color: "#333",
-//     fontWeight: "bold",
-//     fontSize: 16,
-//   },
-//   modalContainer: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "rgba(0,0,0,0.5)",
-//   },
-//   modalContent: {
-//     width: 300,
-//     padding: 20,
-//     backgroundColor: "white",
-//     borderRadius: 10,
-//     alignItems: "center",
-//   },
-//   modalTitle: {
-//     fontSize: 20,
-//     fontWeight: "bold",
-//     marginBottom: 10,
-//   },
-//   modalDescription: {
-//     fontSize: 16,
-//     color: "#333",
-//     textAlign: "center",
-//     marginBottom: 20,
-//   },
-//   closeButton: {
-//     backgroundColor: "#ff3b30",
-//     padding: 10,
-//     borderRadius: 5,
-//   },
-//   closeButtonText: {
-//     color: "white",
-//     fontWeight: "bold",
-//   },
-//   deleteButton: {
-//     backgroundColor: "#ff3b30",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     height: "80%",
-//     width: 80,
-//     borderRadius: 10,
-//   },
-//   deleteButtonText: {
-//     color: "white",
-//     fontWeight: "bold",
-//   },
-// });
-
-
-
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
-  Modal,
-} from "react-native";
+import BottomTabBar from "@/components/bottomfloating";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, SafeAreaView, Modal } from "react-native";
 import { Swipeable, GestureHandlerRootView } from "react-native-gesture-handler";
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, getFirestore } from "firebase/firestore";
+import { useAuth } from "@/context/authContex";
+import { useRouter } from "expo-router";
+
+interface Lesson {
+  id: number;
+  title: string;
+  content: string;
+}
 
 interface Module {
   id: number;
   name: string;
   description?: string;
+  lessons?: Lesson[];
 }
 
 const ModulesScreen = () => {
+  const { user } = useAuth();
   const [modulesData, setModulesData] = useState<Module[]>([]);
   const [availableModules, setAvailableModules] = useState<Module[]>([
-    { id: 101, name: "Module 1- Evaluation of Patient Data in Cardiopulmonary Care", description: "Objective: Understand how to evaluate and interpret various patient data in the context of the cardiopulmonary system. \nAudience: Medical professionals, respiratory therapists, nurses, or anyone involved in patient care related to the cardiopulmonary system. Overview: This module will explore the key elements of a patient’s medical record, including history, physical examination, diagnostic tests, and other clinical data that help evaluate the cardiopulmonary system." },
-{ id: 102, name: "Module 2", description: "This is the description for Module 2.\nIt contains additional details." },
+    { id: 101, name: "Module 1 - Evaluation of Patient Data in Cardiopulmonary Care", description: "Objective: Understand how to evaluate and interpret various patient data in the context of the cardiopulmonary system." },
+    { id: 102, name: "Module 2", description: "This is the description for Module 2.\nIt contains additional details." },
     { id: 103, name: "Module 3", description: "This is the description for Module 3.\nYou can add as many points as needed." },
   ]);
-
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
+  const [showLessons, setShowLessons] = useState(false);
 
-  const handleDelete = (id: number) => {
-    setModulesData((prev) => {
-      const removedModule = prev.find((module) => module.id === id);
-      if (removedModule) {
-        setAvailableModules((prevAvailable) => [...prevAvailable, removedModule]);
+  const firestore = getFirestore();
+  const router = useRouter();
+
+  // Fetch assigned modules
+  useEffect(() => {
+    if (user) {
+      const fetchAssignedModules = async () => {
+        try {
+          const userRef = doc(firestore, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            setModulesData(userData?.assignedModules || []);
+          }
+        } catch (error) {
+          console.error("Error fetching assigned modules: ", error);
+        }
+      };
+
+      fetchAssignedModules();
+    }
+  }, [user]);
+
+  // Fetch lessons for selected module
+  const fetchLessonsForModule = async (moduleId: number) => {
+    try {
+      const moduleRef = doc(firestore, "modules", moduleId.toString());
+      const moduleSnap = await getDoc(moduleRef);
+
+      if (moduleSnap.exists()) {
+        const moduleData = moduleSnap.data();
+        setSelectedModule({
+          id: moduleId,
+          name: moduleData.name || "Unnamed Module", // Ensure we have a name
+          description: moduleData.description, // If description exists
+          lessons: moduleData.lessons || [], // Default to empty array if no lessons
+        });
+        setShowLessons(true);
       }
-      return prev.filter((module) => module.id !== id);
-    });
+    } catch (error) {
+      console.error("Error fetching module lessons: ", error);
+    }
   };
 
-  const handleAssign = (module: Module) => {
-    setModulesData((prev) => [...prev, { id: module.id, name: module.name }]);
-    setAvailableModules((prev) => prev.filter((m) => m.id !== module.id));
-    setSelectedModule(null);
+  // Handle assigning module
+  const handleAssign = async (module: Module) => {
+    if (!user) return;
+
+    try {
+      const userRef = doc(firestore, "users", user.uid);
+      await updateDoc(userRef, {
+        assignedModules: arrayUnion(module),
+      });
+
+      setModulesData((prev) => [...prev, module]);
+      setAvailableModules((prev) => prev.filter((m) => m.id !== module.id));
+      setSelectedModule(null);
+    } catch (error) {
+      console.error("Error assigning module: ", error);
+    }
   };
 
-  const renderRightActions = (id: number) => (
-    <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(id)}>
+  // Handle deleting assigned module
+  const handleDelete = async (module: Module) => {
+    if (!user) return;
+
+    try {
+      const userRef = doc(firestore, "users", user.uid);
+      await updateDoc(userRef, {
+        assignedModules: arrayRemove(module),
+      });
+
+      setModulesData((prev) => prev.filter((m) => m.id !== module.id));
+      setAvailableModules((prev) => {
+        if (!prev.some((m) => m.id === module.id)) {
+          return [...prev, module];
+        }
+        return prev;
+      });
+    } catch (error) {
+      console.error("Error deleting module: ", error);
+    }
+  };
+
+  // Render right swipe actions
+  const renderRightActions = (module: Module) => (
+    <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(module)}>
       <Text style={styles.deleteButtonText}>Delete</Text>
     </TouchableOpacity>
   );
@@ -471,16 +126,13 @@ const ModulesScreen = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <ScrollView>
-          <View style={styles.graphContainer}>
-            <Text style={styles.graphTitle}>Graph Placeholder</Text>
-            <View style={styles.graphPlaceholder} />
-          </View>
-          
           <View style={styles.modulesSection}>
             <Text style={styles.sectionTitle}>Assigned Modules</Text>
             {modulesData.map((module) => (
-              <Swipeable key={module.id} renderRightActions={() => renderRightActions(module.id)}>
-                <ModuleCard name={module.name} styles={styles} />
+              <Swipeable key={module.id} renderRightActions={() => renderRightActions(module)}>
+                <TouchableOpacity onPress={() => fetchLessonsForModule(module.id)}>
+                  <ModuleCard name={module.name} styles={styles} />
+                </TouchableOpacity>
               </Swipeable>
             ))}
           </View>
@@ -488,25 +140,32 @@ const ModulesScreen = () => {
           <View style={styles.modulesSection}>
             <Text style={styles.sectionTitle}>Available Modules</Text>
             {availableModules.map((module) => (
-              <TouchableOpacity key={module.id} onPress={() => setSelectedModule(module)}>
+              <TouchableOpacity key={module.id} onPress={() => { setSelectedModule(module); setShowLessons(false); }}>
                 <ModuleCard name={module.name} styles={styles} />
               </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
       </SafeAreaView>
-      
-      <Modal
-        visible={!!selectedModule}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setSelectedModule(null)}
-      >
+
+      {/* Modal for Module Assignment */}
+      <Modal visible={selectedModule !== null} animationType="slide" transparent={true} onRequestClose={() => setSelectedModule(null)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>{selectedModule?.name}</Text>
-            <Text style={styles.modalDescription}>{selectedModule?.description}</Text>
-            <TouchableOpacity onPress={() => handleAssign(selectedModule!)} style={styles.assignButton}>
+            {showLessons && selectedModule?.lessons ? (
+              <View>
+                {selectedModule.lessons.map((lesson) => (
+                  <View key={lesson.id}>
+                    <Text style={styles.lessonTitle}>{lesson.title}</Text>
+                    <Text style={styles.lessonContent}>{lesson.content}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <Text style={styles.modalDescription}>{selectedModule?.description}</Text>
+            )}
+            <TouchableOpacity onPress={() => { handleAssign(selectedModule!); setShowLessons(false); }} style={styles.assignButton}>
               <Text style={styles.assignButtonText}>Assign</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setSelectedModule(null)} style={styles.closeButton}>
@@ -515,16 +174,14 @@ const ModulesScreen = () => {
           </View>
         </View>
       </Modal>
+
+      <BottomTabBar />
     </GestureHandlerRootView>
   );
 };
 
-interface ModuleCardProps {
-  name: string;
-  styles: any;
-}
-
-const ModuleCard = ({ name, styles }: ModuleCardProps) => {
+// ModuleCard Component for displaying each module
+const ModuleCard = ({ name, styles }: { name: string, styles: any }) => {
   return (
     <View style={styles.card}>
       <Text style={styles.cardText}>{name}</Text>
@@ -538,25 +195,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-  },
-  graphContainer: {
-    height: 200,
-    backgroundColor: "#ddd",
-    marginBottom: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-  },
-  graphTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  graphPlaceholder: {
-    width: "100%",
-    height: "80%",
-    backgroundColor: "#ccc",
-    borderRadius: 8,
   },
   modulesSection: {
     marginBottom: 30,
@@ -631,6 +269,14 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
     marginBottom: 20,
+  },
+  lessonTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  lessonContent: {
+    fontSize: 16,
+    color: "#333",
   },
   closeButton: {
     backgroundColor: "#ff3b30",
