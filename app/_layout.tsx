@@ -13,6 +13,16 @@ export default function RootLayout() {
           <Stack.Screen name="(root)/testscreen" options={{ headerShown: false }} />
           <Stack.Screen name="(root)/ScoreScreen" options={{ headerShown: false }} />
           <Stack.Screen name="(root)/mods" options={{ headerShown: false, animation: "none" }} />
+          <Stack.Screen
+            name="Modules/Modules1"
+            options={{
+              title: 'Module 1',
+              headerShown: false, // Hides the entire header, including the back button
+            }}
+          />
+
+
+
         </Stack>
       </AuthProvider>
     </GestureHandlerRootView>

@@ -78,9 +78,6 @@ const Home = () => {
         testType: string;
         image: any;
     }
-
-
-
     const CardItem: React.FC<CardItemProps> = ({ title, testType, image }) => {
         const router = useRouter();
        
@@ -105,9 +102,9 @@ const Home = () => {
                     <Text style={styles.welcometext}>
                         {userData?.username
                             ? `${userData.username} ${userData.lastName ? userData.lastName.charAt(0).toUpperCase() + '.' : ''}`
-                            : "Welcome!"}
+                            : ""}
                     </Text>
-                    <Text style={styles.schooltext}>{userData?.school || "School"}</Text>
+                    <Text style={styles.schooltext}>{userData?.school || ""}</Text>
                 </View>
                 <Ionicons name='settings-outline' size={30} color={"white"} />
             </View>
