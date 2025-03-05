@@ -15,8 +15,9 @@ const Home = () => {
     const router = useRouter(); 
     const [userData, setUserData] = useState<{ username: string; school: string; lastName?: string } | null>(null);
 
-
-
+    const replace = () => {
+        router.replace('/(root)/Settings'); // Adjust the path as necessary
+      };
  
 
     useEffect(() => {
@@ -106,7 +107,9 @@ const Home = () => {
                     </Text>
                     <Text style={styles.schooltext}>{userData?.school || ""}</Text>
                 </View>
+                <TouchableOpacity onPress={replace}>
                 <Ionicons name='settings-outline' size={30} color={"white"} />
+                </TouchableOpacity>
             </View>
 
                             <Image source={require("../../assets/images/Line6.png")} style={styles.lineimg} />
@@ -117,7 +120,7 @@ const Home = () => {
                 </View>
                 <View style={styles.statarrow}>
                 <TouchableOpacity onPress={handleModbutton}>
-                <Ionicons name='arrow-forward-circle' size={60} color={"white"} />
+                <Ionicons name='arrow-forward-outline' size={30} color={"white"} />
                 </TouchableOpacity>
 
                 </View>
@@ -162,8 +165,8 @@ const styles = StyleSheet.create({
          left:3,
     },
     statarrow: {
-        left: 300,
-        top: 30,
+        left: 315,
+        top: 10,
         shadowColor: '#000', // Black shadow color
         shadowOffset: { width: 0, height: 1 }, // Shadow offset
         shadowOpacity: 0.8, // Opacity of the shadow
@@ -187,6 +190,8 @@ const styles = StyleSheet.create({
         top:40,
         height:1000,
         marginBottom:0,
+        marginTop:10,
+        left:8,
       },
       card: {
         right: 5,
@@ -223,13 +228,16 @@ const styles = StyleSheet.create({
         height:280,
         bottom:90,
         paddingTop:90,
-        borderBottomLeftRadius:40,
-        borderBottomRightRadius:40,
+        
     },
     bottomcontainer:{
-        backgroundColor:"white",
-        bottom:90,
+        backgroundColor:"#DDE6E8",
+        bottom:140,
         marginBottom:150,
+        borderTopLeftRadius:35,
+        borderTopRightRadius:35,
+        height:790,
+        
 
     },
     profset:{
@@ -264,7 +272,7 @@ const styles = StyleSheet.create({
     },
     headertextloc:{
         flexDirection:"row",
-        top:100,
+        top:50,
         justifyContent:'space-between',
         paddingLeft:20,
         paddingRight:20,

@@ -558,6 +558,7 @@ import { doc, updateDoc, arrayUnion, arrayRemove, getFirestore, getDoc } from "f
 import { useAuth } from "@/context/authContex";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Lesson {
   id: number;
@@ -577,7 +578,7 @@ const ModulesScreen = () => {
   const [modulesData, setModulesData] = useState<Module[]>([]);
   const [availableModules, setAvailableModules] = useState<Module[]>([
     { id: 101, name: "Module 1 - Evaluation of Patient Data in Cardiopulmonary Care", description: "Objective: Understand how to evaluate and interpret various patient data in the context of the cardiopulmonary system." },
-    { id: 102, name: "Module 2", description: "This is the description for Module 2.\nIt contains additional details." },
+    { id: 102, name: "Module 2 - Breathsounds", description: "This module provides an in-depth exploration of breath sounds, equipping healthcare professionals with the knowledge to assess, interpret, and differentiate normal and abnormal lung sounds. Topics include auscultation techniques, common breath sound characteristics, and their clinical significance in diagnosing respiratory conditions. Perfect for students and practitioners looking to enhance their respiratory assessment skills." },
     { id: 103, name: "Module 3", description: "This is the description for Module 3.\nYou can add as many points as needed." },
   ]);
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
@@ -701,7 +702,7 @@ const ModulesScreen = () => {
       </SafeAreaView>
 
       {/* Modal for Module Assignment */}
-      <Modal visible={selectedModule !== null} animationType="slide" transparent={true} onRequestClose={() => setSelectedModule(null)}>
+      <Modal visible={selectedModule !== null} animationType="none" transparent={true} onRequestClose={() => setSelectedModule(null)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>{selectedModule?.name}</Text>
@@ -721,7 +722,7 @@ const ModulesScreen = () => {
               <Text style={styles.assignButtonText}>Assign</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setSelectedModule(null)} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Ionicons name="close-circle" size={50}  color={"white"}/>
             </TouchableOpacity>
           </View>
         </View>
@@ -746,7 +747,8 @@ export default ModulesScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#DDE6E8",
+    paddingLeft:12,
   },
   modulesSection: {
     marginBottom: 30,
@@ -759,11 +761,11 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   card: {
-    backgroundColor: "#F9DDDD",
+    backgroundColor: "#FFFFFF",
     padding: 20,
     borderRadius: 10,
     marginBottom: 15,
-    width: 350,
+    width: 370,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
@@ -776,15 +778,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   assignButton: {
+    top:340,
+    position:"absolute",
     backgroundColor: "#4CAF50",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 30,
     alignItems: "center",
-    marginTop: 5,
+    justifyContent:"center",
+    marginTop: 3,
+    height:50,
+    width:340,
   },
   assignButtonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize:25,
   },
   deleteButton: {
     backgroundColor: "#ff3b30",
@@ -802,13 +810,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.6)",
   },
   modalContent: {
-    width: 300,
+    height:400,
+    width: 350,
     padding: 20,
     backgroundColor: "white",
-    borderRadius: 10,
+    borderRadius: 30,
     alignItems: "center",
   },
   modalTitle: {
@@ -821,7 +830,11 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   closeButton: {
+    position:"absolute",
+    color:"blue",
     marginTop: 10,
+    bottom:400,
+    left:280,
   },
   closeButtonText: {
     fontSize: 16,

@@ -3,8 +3,8 @@ import { signInWithEmailAndPassword } from "@firebase/auth";
 import { Link, useRouter } from "expo-router";
 import { replace } from "expo-router/build/global-state/routing";
 import { useState } from "react"
-import { Button, ImageBackground, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-
+import { Button, Image, ImageBackground, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -14,15 +14,34 @@ const Loginscreen = () => {
     const router = useRouter();  
  
  
+    // const handleLogin = async () => {
+    //     try {
+    //         await signInWithEmailAndPassword(FIREBASE_AUTH, Email, Password);
+    //         console.log('Login successful');
+    //         router.replace("/[home]"); 
+    //     } catch (error) {
+    //         console.error("login error", error);
+    //         alert("Login failed, please check credentials");
+    //     }
+    // };
+
+
     const handleLogin = async () => {
-        try {
-            await signInWithEmailAndPassword(FIREBASE_AUTH, Email, Password);
-            console.log('Login successful');
-            router.replace("/[home]"); 
-        } catch (error) {
-            console.error("login error", error);
-            alert("Login failed, please check credentials");
-        }
+      try {
+          const userCredential = await signInWithEmailAndPassword(FIREBASE_AUTH, Email, Password);
+          const user = userCredential.user;
+          
+          if (user) {
+              // Store user authentication token
+              await AsyncStorage.setItem('userToken', user.uid);
+
+              console.log('Login successful');
+              router.replace("/(root)/Home"); // Navigate to home screen
+          }
+      } catch (error) {
+          console.error("login error", error);
+          alert("Login failed, please check credentials");
+      }
     };
 
 
@@ -34,11 +53,18 @@ const Loginscreen = () => {
 
    return (
         <ImageBackground 
-          source={require('../../assets/images/loginscreenbg.png')} 
+          source={require('../../assets/images/background.png')} 
           style={styles.backgroundImage}
           resizeMode="cover" // "cover", 
         >
+
           <View style={styles.container}>
+              <View style={styles.imagecont}>
+               <Image 
+                source={require('../../assets/images/translogo.png')} // Local image
+                style={styles.transimage}
+              />  
+              </View>
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"} 
               keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} 
@@ -102,7 +128,7 @@ const Loginscreen = () => {
 
 const styles = StyleSheet.create ({
     bottombutton:{
-        bottom:200,
+        bottom:120,
         alignItems:"center",
     },
     bottomborer:{
@@ -110,15 +136,24 @@ const styles = StyleSheet.create ({
         padding:10,
         borderRadius:41,
     },
-    inputcard:{
-        backgroundColor:"rgba(107, 107, 178, 0.6)",
-        padding:15,
-        paddingTop:20,
-        borderRadius:21,
-        top:80,
-        paddingBottom:0,
-        height:200,
-    },
+    inputcard: {
+      backgroundColor: "rgba(107, 107, 178, 0.6)",
+      padding: 15,
+      paddingTop: 20,
+      borderRadius: 21,
+      paddingBottom: 0,
+      height: 200,
+      bottom:20,
+  
+      // Shadow for iOS
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 5,
+  
+      // Elevation for Android
+      elevation: 5,
+  },
     logbutton:{
         backgroundColor:"#72BAAE",
         width:121,
@@ -154,6 +189,17 @@ const styles = StyleSheet.create ({
     flex: 1, 
     width: '100%', 
     height: '100%',
+   },
+   transimage:{
+    resizeMode:"cover",
+    height:300,
+    width:300,
+    left:30,
+    bottom:130,
+   },
+   imagecont:{
+    left:20,
+    top:0,
    },
 })
 
