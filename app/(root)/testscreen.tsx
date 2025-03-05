@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useRouter } from 'expo-router';
 import questions from '../data/questions';
+
+
+const { width, height } = Dimensions.get('window');
 
 const TestScreen = () => {
   const { testType } = useLocalSearchParams<{ testType: keyof typeof questions }>();
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
   questionContainer: {
     top: 100,
     height: 500,
-    width: 350,
+    width: width * 0.9,
     marginBottom: 20,
     padding: 15,
     backgroundColor: '#13002c',

@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
          left:3,
     },
     statarrow: {
-        left: 315,
-        top: 10,
+        left: "80.5%",
+        top: 8,
         shadowColor: '#000', // Black shadow color
         shadowOffset: { width: 0, height: 1 }, // Shadow offset
         shadowOpacity: 0.8, // Opacity of the shadow
@@ -186,21 +186,21 @@ const styles = StyleSheet.create({
         marginTop:-5,
       },    
     listContainer: {
-        padding: 10,
         top:40,
-        height:1000,
+        height:"135%",
         marginBottom:0,
         marginTop:10,
-        left:8,
+        left:"4%",
+        width:"90%",
       },
       card: {
         right: 5,
         backgroundColor: '#CB696C',
         padding: 20,
         borderRadius: 10,
-        width: 160,
-        height: 120,
-        marginTop: 0,
+        width: "50%",
+        height: 140,
+        marginRight:20,
         // Shadow for iOS
         shadowColor: 'black',
         shadowOffset: { width: 0, height: 3 },
@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         // Elevation for Android
         elevation: 5,
+
       },
       cardText: {
         top:0,

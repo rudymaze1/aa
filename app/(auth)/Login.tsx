@@ -143,7 +143,9 @@ const styles = StyleSheet.create ({
       borderRadius: 21,
       paddingBottom: 0,
       height: 200,
-      bottom:20,
+      bottom:"60%",
+      width:"90%",
+      left:"5%",
   
       // Shadow for iOS
       shadowColor: "#000",
@@ -156,10 +158,10 @@ const styles = StyleSheet.create ({
   },
     logbutton:{
         backgroundColor:"#72BAAE",
-        width:121,
-        left:205,
-        height:36,
-        borderRadius:30,
+        width:"60%",
+        left:"40%",
+        height:"25%",
+        borderRadius:20,
         justifyContent: 'center',
         alignItems:"center",
     },
@@ -192,13 +194,11 @@ const styles = StyleSheet.create ({
    },
    transimage:{
     resizeMode:"cover",
-    height:300,
-    width:300,
-    left:30,
-    bottom:130,
+    height:"60%",
+    width:"80%",
    },
    imagecont:{
-    left:20,
+    left:"10%",
     top:0,
    },
 })
